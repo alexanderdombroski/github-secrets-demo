@@ -38,6 +38,9 @@ jobs:
         with:
           # Upload entire repository
           path: '.'
+      - name: Add Secrets
+        run: |
+            export VITE_API_KEY="${{ secrets.VITE_API_KEY }}"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
