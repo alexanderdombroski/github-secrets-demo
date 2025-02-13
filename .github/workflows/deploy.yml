@@ -1,48 +1,57 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+# Deploy Customized Vite site to GitHub pages
+name: Deploy Deno-built Site to GitHub Pages
 
 on:
-  # Runs on pushes targeting the default branch
+  # Run the workflow on push to main and on manual dispatch
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: read  # Required for fetching the repo
+  pages: write    # Required for deploying to GitHub Pages
+  id-token: write # Required for authentication during Pages deployment
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      # Step 1: Checkout the repo
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      # Step 2: Setup Deno environment
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      # Step 3: Install dependencies and build with Vite
+      - name: Build with Vite using Deno
+        run: |
+          echo "API_KEY=${{ secrets.VITE_API_KEY }}"> .env
+          deno run build
+
+      # Step 4: Setup Pages configuration
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      - name: Add Secrets
-        env: 
-          API_KEY: ${{ secrets.VITE_API_KEY }}
-        run: |
-            echo "API_KEY=${API_KEY}" > .env
-      - name: Upload artifact
+
+      # Step 5: Upload the `dist` folder as an artifact for deployment
+      - name: Upload artifact to Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          path: dist  # Only upload the built files in the `dist` folder
+
+      # Step 6: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
