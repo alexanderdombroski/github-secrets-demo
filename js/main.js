@@ -1,7 +1,7 @@
 import fetchData from "./fetch.js";
 
 // TODO - get API key from env (import.meta.env)
-const apiKey = import.meta.env.API_KEY;
+const apiKey = import.meta.env.VITE_API_KEY;
 
 // IIFE for top level awaits
 (async function loadWeather() { 

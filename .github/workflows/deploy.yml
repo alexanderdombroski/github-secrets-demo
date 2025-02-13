@@ -34,7 +34,7 @@ jobs:
       # Step 3: Install dependencies and build with Vite
       - name: Build with Vite using Deno
         run: |
-          echo "API_KEY=${{ secrets.VITE_API_KEY }}"> .env
+          echo "VITE_API_KEY=${{ secrets.VITE_API_KEY }}"> .env
           deno run build
 
       # Step 4: Setup Pages configuration
