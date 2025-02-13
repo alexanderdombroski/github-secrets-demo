@@ -20,5 +20,5 @@ const apiKey = import.meta.env.VITE_API_KEY;
     const temperature = ((parseFloat(temperatureData.list[0].main.temp) - 273.15) * 9/5 + 32).toFixed(1);
 
     const tempContainer = document.querySelector(".temperature-message");
-    tempContainer.innerText = `The temperature will be ${temperature}℉ on soon at ${date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
+    tempContainer.innerText = `The temperature will be ${temperature}℉ soon at ${date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
 })();
