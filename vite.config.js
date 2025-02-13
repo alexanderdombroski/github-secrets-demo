@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite'
-import deno from '@deno/vite-plugin'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -9,6 +8,5 @@ export default defineConfig({
     outDir: './dist',
     emptyOutDir: true
   },
-  plugins: [deno()],
   publicDir: 'public'
 })
